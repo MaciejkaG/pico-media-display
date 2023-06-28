@@ -3,7 +3,7 @@ import serial
 from time import sleep
 from anyascii import anyascii
 
-import winsdk.windows.media as win
+from winsdk.windows.media import MediaPlaybackType
 from winsdk.windows.media.control import \
     GlobalSystemMediaTransportControlsSessionManager as MediaManager
 
@@ -22,7 +22,7 @@ async def getMediaInfo():
         return info_dict
 
 def sendData(data : str):
-    s = serial.Serial("COM3", 115200, timeout=5)
+    s = serial.Serial("COM3", 115200, timeout=3)
     s.flush()
     s.write(anyascii(data+"\n").encode('ascii'))
     s.read_until()
@@ -33,13 +33,12 @@ if __name__ == '__main__':
             currentMediaInfo = asyncio.run(getMediaInfo())
         except OSError:
             print("OSError occured while trying to fetch media properties, ignoring it")
-            sleep(3)
             pass
         else:
             try:
-                if currentMediaInfo and currentMediaInfo['playback_type']==win.MediaPlaybackType.MUSIC:
+                if currentMediaInfo and currentMediaInfo['playback_type']==MediaPlaybackType.MUSIC:
                     sendData(f"{currentMediaInfo['album_title']}\\\\{currentMediaInfo['title']}\\\\{currentMediaInfo['album_artist']}")
             except:
-                print("Error while trying to update the data, please reconnect the device.")
-                sleep(3)
+                print("Error while trying to update the data, please reconnect the device if this error is recurring.")
                 pass
+        sleep(1)
