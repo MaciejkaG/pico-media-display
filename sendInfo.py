@@ -30,5 +30,5 @@ def sendData(data : str):
 if __name__ == '__main__':
     while True:
         currentMediaInfo = asyncio.run(getMediaInfo())
-        if currentMediaInfo['playback_type']==win.MediaPlaybackType.MUSIC:
+        if currentMediaInfo and currentMediaInfo['playback_type']==win.MediaPlaybackType.MUSIC:
             sendData(f"{currentMediaInfo['album_title']}\\\\{currentMediaInfo['title']}\\\\{currentMediaInfo['album_artist']}")
