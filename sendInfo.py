@@ -29,10 +29,17 @@ def sendData(data : str):
 
 if __name__ == '__main__':
     while True:
-        currentMediaInfo = asyncio.run(getMediaInfo())
         try:
-            if currentMediaInfo and currentMediaInfo['playback_type']==win.MediaPlaybackType.MUSIC:
-                sendData(f"{currentMediaInfo['album_title']}\\\\{currentMediaInfo['title']}\\\\{currentMediaInfo['album_artist']}")
-        except:
+            currentMediaInfo = asyncio.run(getMediaInfo())
+        except OSError:
+            print("OSError occured while trying to fetch media properties, ignoring it")
             sleep(3)
             pass
+        else:
+            try:
+                if currentMediaInfo and currentMediaInfo['playback_type']==win.MediaPlaybackType.MUSIC:
+                    sendData(f"{currentMediaInfo['album_title']}\\\\{currentMediaInfo['title']}\\\\{currentMediaInfo['album_artist']}")
+            except:
+                print("Error while trying to update the data, please reconnect the device.")
+                sleep(3)
+                pass
