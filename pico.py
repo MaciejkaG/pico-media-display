@@ -18,6 +18,7 @@ poll_obj.register(sys.stdin, select.POLLIN)
 while True:
     poll_results = poll_obj.poll(1)
     if poll_results:
+        r = False
         data = sys.stdin.readline().strip()
         data = data.split("\\\\")
         try:
@@ -47,6 +48,8 @@ while True:
                 sleep(2)
         lcd.clear()
     else:
-        lcd.clear()
-        lcd.putstr("Waiting for data")
+        if not r:
+            lcd.clear()
+            lcd.putstr("Waiting for data")
+            r = True
         sleep(1)
