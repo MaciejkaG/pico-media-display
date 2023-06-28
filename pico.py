@@ -48,5 +48,5 @@ while True:
         lcd.clear()
     else:
         lcd.clear()
-        lcd.putstr("Oczekiwanie na  dane")
-        sleep(3)
+        lcd.putstr("Waiting for data")
+        sleep(1)
